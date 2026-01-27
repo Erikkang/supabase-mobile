@@ -8,6 +8,12 @@
     "scheme": "supabasemobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
+    "extra": {
+      "SUPABASE_URL": "https://jeumueiuzkezypfpqttg.supabase.co",
+      "SUPABASE_ANON_KEY": "sb_publishable_InvZnmimc0lAOs_U-yjQpQ_LecJ7oqB"
+    },
+
     "ios": {
       "supportsTablet": true
     },
