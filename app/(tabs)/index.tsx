@@ -1,25 +1,20 @@
-import { Image } from 'expo-image';
-import { Link } from 'expo-router';
 import { useEffect } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { supabase } from '../../supabase';
 
-import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-export default function HomeScreen() {
 
+export default function HomeScreen() {
   useEffect(() => {
     testSupabase();
   }, []);
 
   const testSupabase = async () => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*');
+    const { data, error } = await supabase.from('users').select('*');
 
     if (error) {
       console.log('❌ Supabase error:', error.message);
@@ -30,78 +25,53 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }
+      headerBackgroundColor={{ light: '#F4F7FF', dark: '#0F172A' }}
     >
+      {/* TITLE */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Skin Condition Analyzer</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type="defaultSemiBold">
-            app/(tabs)/index.tsx
-          </ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+        <ThemedText style={styles.subtitle}>
+          Upload a facial image to analyze skin conditions
+        </ThemedText>
+        <ThemedText style={styles.disclaimer}>
+          This is a demo tool for educational purposes only. Consult a
+          dermatologist for medical advice.
         </ThemedText>
       </ThemedView>
 
+      {/* UPLOAD AREA */}
       <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction
-              title="Action"
-              icon="cube"
-              onPress={() => alert('Action pressed')}
-            />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+        <ThemedView style={styles.uploadBox}>
+          <ThemedText style={styles.uploadIcon}>⬆️</ThemedText>
+          <ThemedText style={styles.uploadText}>
+            Drag and drop an image here, or click to select
+          </ThemedText>
+          <ThemedText style={styles.supportText}>
+            Supports: JPG, PNG, WEBP
+          </ThemedText>
 
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter
-          app.
-        </ThemedText>
+          <TouchableOpacity style={styles.button}>
+            <ThemedText style={styles.buttonText}>
+              Choose Image
+            </ThemedText>
+          </TouchableOpacity>
+        </ThemedView>
       </ThemedView>
 
+      {/* HOW IT WORKS */}
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{' '}
-          to get a fresh app directory.
+        <ThemedText type="subtitle">ℹ️ How It Works</ThemedText>
+        <ThemedText style={styles.infoText}>
+          This tool uses simulated image analysis to identify potential skin
+          conditions. In a production environment, this would connect to a
+          machine learning model trained on dermatological images.
+        </ThemedText>
+        <ThemedText style={styles.infoText}>
+          For best results, upload a well-lit, clear photo of the affected
+          area. Avoid filters or heavy makeup that might affect the analysis.
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
@@ -110,19 +80,62 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 12,
   },
+
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 20,
+    paddingHorizontal: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  subtitle: {
+    textAlign: 'center',
+  },
+
+  disclaimer: {
+    textAlign: 'center',
+    fontSize: 12,
+    opacity: 0.7,
+  },
+
+  uploadBox: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+  },
+
+  uploadIcon: {
+    fontSize: 28,
+  },
+
+  uploadText: {
+    textAlign: 'center',
+  },
+
+  supportText: {
+    fontSize: 12,
+    opacity: 0.6,
+    marginBottom: 12,
+  },
+
+  button: {
+    backgroundColor: '#2563EB',
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+
+  infoText: {
+    fontSize: 13,
+    opacity: 0.8,
   },
 });
