@@ -1,12 +1,16 @@
-import { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+
 
 import { supabase } from '../../supabase';
 
+import { HowItWorksCard } from '@/components/HowItWorksCard';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-
+import { UploadBox } from '@/components/UploadBox';
 
 export default function HomeScreen() {
   useEffect(() => {
@@ -23,6 +27,28 @@ export default function HomeScreen() {
     }
   };
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    const permission =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      alert('Permission to access gallery is required.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#F4F7FF', dark: '#0F172A' }}
@@ -32,6 +58,7 @@ export default function HomeScreen() {
         <ThemedText type="title">Skin Condition Analyzer</ThemedText>
       </ThemedView>
 
+      {/* SUBTITLE */}
       <ThemedView style={styles.stepContainer}>
         <ThemedText style={styles.subtitle}>
           Upload a facial image to analyze skin conditions
@@ -42,37 +69,25 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      {/* UPLOAD AREA */}
+      {/* UPLOAD */}
       <ThemedView style={styles.stepContainer}>
-        <ThemedView style={styles.uploadBox}>
-          <ThemedText style={styles.uploadIcon}>⬆️</ThemedText>
-          <ThemedText style={styles.uploadText}>
-            Drag and drop an image here, or click to select
-          </ThemedText>
-          <ThemedText style={styles.supportText}>
-            Supports: JPG, PNG, WEBP
-          </ThemedText>
-
-          <TouchableOpacity style={styles.button}>
-            <ThemedText style={styles.buttonText}>
-              Choose Image
-            </ThemedText>
-          </TouchableOpacity>
-        </ThemedView>
+        <UploadBox onPickImage={pickImage} />
       </ThemedView>
+
+      {/* IMAGE PREVIEW */}
+      {selectedImage && (
+        <ThemedView style={styles.stepContainer}>
+          <Image
+            source={{ uri: selectedImage }}
+            style={styles.previewImage}
+            contentFit="cover"
+          />
+        </ThemedView>
+      )}
 
       {/* HOW IT WORKS */}
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">ℹ️ How It Works</ThemedText>
-        <ThemedText style={styles.infoText}>
-          This tool uses simulated image analysis to identify potential skin
-          conditions. In a production environment, this would connect to a
-          machine learning model trained on dermatological images.
-        </ThemedText>
-        <ThemedText style={styles.infoText}>
-          For best results, upload a well-lit, clear photo of the affected
-          area. Avoid filters or heavy makeup that might affect the analysis.
-        </ThemedText>
+        <HowItWorksCard />
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -100,42 +115,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 
-  uploadBox: {
-    borderWidth: 2,
-    borderStyle: 'dashed',
+  previewImage: {
+    width: '100%',
+    height: 220,
     borderRadius: 12,
-    padding: 24,
-    alignItems: 'center',
-  },
-
-  uploadIcon: {
-    fontSize: 28,
-  },
-
-  uploadText: {
-    textAlign: 'center',
-  },
-
-  supportText: {
-    fontSize: 12,
-    opacity: 0.6,
-    marginBottom: 12,
-  },
-
-  button: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-
-  infoText: {
-    fontSize: 13,
-    opacity: 0.8,
   },
 });

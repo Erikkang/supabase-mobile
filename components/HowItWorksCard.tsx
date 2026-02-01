@@ -1,11 +1,22 @@
+import { StyleSheet } from 'react-native';
+
+import { IconSymbol } from '@/components/IconSymbol';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet } from 'react-native';
 
 export function HowItWorksCard() {
   return (
     <ThemedView>
-      <ThemedText type="subtitle">ℹ️ How It Works</ThemedText>
+      {/* TITLE WITH ICON */}
+      <ThemedView style={styles.titleRow}>
+  <IconSymbol
+    name="information-circle-outline"
+    size={18}
+    color="#2563EB"
+  />
+  <ThemedText type="subtitle">How It Works</ThemedText>
+</ThemedView>
+
 
       <ThemedText style={styles.text}>
         This tool uses simulated image analysis to identify potential skin
@@ -22,6 +33,12 @@ export function HowItWorksCard() {
 }
 
 const styles = StyleSheet.create({
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+
   text: {
     fontSize: 13,
     opacity: 0.8,

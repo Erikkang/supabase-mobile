@@ -1,11 +1,13 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { IconSymbol } from './IconSymbol'; // import your fixed component
 
 export function UploadBox() {
   return (
     <ThemedView style={styles.uploadBox}>
-      <ThemedText style={styles.uploadIcon}>⬆️</ThemedText>
+      {/* Use Ionicons instead of emoji */}
+      <IconSymbol name="cloud-upload" style={styles.uploadIcon} />
 
       <ThemedText style={styles.uploadText}>
         Drag and drop an image here, or click to select
@@ -25,37 +27,37 @@ export function UploadBox() {
 }
 
 const styles = StyleSheet.create({
-    uploadBox: {
-        borderWidth: 2,
-        borderStyle: 'dashed',
-        borderRadius: 12,
-        padding: 24,
-        alignItems: 'center',
-    },
+  uploadBox: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+  },
 
-    uploadIcon: {
-        fontSize: 28,
-        marginBottom: 6,
-    },
+  uploadIcon: {
+    marginBottom: 6,
+  },
 
-    uploadText: {
-        textAlign: 'center',
-    },
+  uploadText: {
+    textAlign: 'center',
+  },
 
-    supportText: {
-        fontSize: 12,
-        opacity: 0.6,
-        marginBottom: 12,
-    },
-    button: {
-        backgroundColor: '#2563EB',
-        paddingVertical: 10,
-        paddingHorizontal: 24,
-        borderRadius: 8,
-    },
-    
-    buttonText: {
-        color: "#FFFFF",
-        fontWeight: '600',
-    },
+  supportText: {
+    fontSize: 12,
+    opacity: 0.6,
+    marginBottom: 12,
+  },
+
+  button: {
+    backgroundColor: '#2563EB',
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+
+  buttonText: {
+    color: '#FFFFFF', // fixed typo (was "#FFFFF")
+    fontWeight: '600',
+  },
 });
