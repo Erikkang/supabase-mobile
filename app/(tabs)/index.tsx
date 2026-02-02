@@ -1,52 +1,32 @@
-import { Image } from 'expo-image';
-import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-
-
-import { supabase } from '../../supabase';
-
 import { HowItWorksCard } from '@/components/HowItWorksCard';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UploadBox } from '@/components/UploadBox';
+import { UploadedPreviewCard } from '@/components/UploadedPreviewCard';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
+
+
+
 
 export default function HomeScreen() {
-  useEffect(() => {
-    testSupabase();
-  }, []);
-
-  const testSupabase = async () => {
-    const { data, error } = await supabase.from('users').select('*');
-
-    if (error) {
-      console.log('❌ Supabase error:', error.message);
-    } else {
-      console.log('✅ Supabase connected! Data:', data);
-    }
-  };
-
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const pickImage = async () => {
-    const permission =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+  // Called when an image is picked in UploadBox
+  const pickImage = (uri: string) => {
+    setSelectedImage(uri);
+  };
 
-    if (!permission.granted) {
-      alert('Permission to access gallery is required.');
-      return;
-    }
+  // Called when Confirm & Analyze is pressed
+  const handleConfirm = () => {
+    console.log('Analyzing image:', selectedImage);
+    // TODO: add analysis function here
+  };
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
-    }
+  // Called when Change Image is pressed
+  const handleChange = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -69,23 +49,20 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      {/* UPLOAD */}
+      {/* UPLOAD OR PREVIEW */}
       <ThemedView style={styles.stepContainer}>
-        <UploadBox onPickImage={pickImage} />
+        {selectedImage ? (
+          <UploadedPreviewCard
+            imageUri={selectedImage}
+            onConfirm={handleConfirm}
+            onChange={handleChange}
+          />
+        ) : (
+          <UploadBox onPickImage={pickImage} />
+        )}
       </ThemedView>
 
-      {/* IMAGE PREVIEW */}
-      {selectedImage && (
-        <ThemedView style={styles.stepContainer}>
-          <Image
-            source={{ uri: selectedImage }}
-            style={styles.previewImage}
-            contentFit="cover"
-          />
-        </ThemedView>
-      )}
-
-      {/* HOW IT WORKS */}
+      {/* HOW IT WORKS - KEEP AS IS */}
       <ThemedView style={styles.stepContainer}>
         <HowItWorksCard />
       </ThemedView>
@@ -94,6 +71,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  
   titleContainer: {
     alignItems: 'center',
     marginBottom: 12,
@@ -113,11 +91,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     opacity: 0.7,
-  },
-
-  previewImage: {
-    width: '100%',
-    height: 220,
-    borderRadius: 12,
   },
 });

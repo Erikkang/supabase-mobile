@@ -5,14 +5,21 @@ type IconSymbolProps = {
   name: keyof typeof Ionicons.glyphMap;
   size?: number;
   color?: string;
-  style?: StyleProp<TextStyle>; // use TextStyle, not ViewStyle
+  style?: StyleProp<TextStyle>;
 };
 
 export function IconSymbol({
   name,
-  size = 28,
-  color = '#2563EB',
+  size = 20,
+  color = '#111827',
   style,
 }: IconSymbolProps) {
-  return <Ionicons name={name} size={size} color={color} style={style} />;
+  return (
+    <Ionicons
+      name={name}
+      size={size}
+      color={color}
+      style={style}
+    />
+  );
 }

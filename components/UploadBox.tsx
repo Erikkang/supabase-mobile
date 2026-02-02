@@ -1,13 +1,10 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
-import { Alert, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { IconSymbol } from './IconSymbol';
 
 export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void }) {
-  const [imageUri, setImageUri] = useState<string | null>(null);
-
   const chooseImage = () => {
     Alert.alert(
       'Select Image',
@@ -23,7 +20,6 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
   const openCamera = async () => {
     try {
       const permission = await ImagePicker.requestCameraPermissionsAsync();
-      
       if (!permission.granted) {
         Alert.alert('Permission Denied', 'Camera permission is required');
         return;
@@ -36,9 +32,7 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
       });
 
       if (!result.canceled && result.assets[0].uri) {
-        const uri = result.assets[0].uri;
-        setImageUri(uri);
-        onPickImage(uri);
+        onPickImage(result.assets[0].uri);
       }
     } catch (error) {
       console.log('Camera error:', error);
@@ -49,7 +43,6 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
   const openGallery = async () => {
     try {
       const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      
       if (!permission.granted) {
         Alert.alert('Permission Denied', 'Gallery permission is required');
         return;
@@ -62,9 +55,7 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
       });
 
       if (!result.canceled && result.assets[0].uri) {
-        const uri = result.assets[0].uri;
-        setImageUri(uri);
-        onPickImage(uri);
+        onPickImage(result.assets[0].uri);
       }
     } catch (error) {
       console.log('Gallery error:', error);
@@ -87,8 +78,6 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
       <TouchableOpacity style={styles.button} onPress={chooseImage}>
         <ThemedText style={styles.buttonText}>Choose Image</ThemedText>
       </TouchableOpacity>
-
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.preview} />}
     </ThemedView>
   );
 }
@@ -121,11 +110,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontWeight: '600',
-  },
-  preview: {
-    width: 200,
-    height: 200,
-    marginTop: 16,
-    borderRadius: 12,
   },
 });
