@@ -47,6 +47,7 @@ export function UploadedPreviewCard({
 const styles = StyleSheet.create({
   wrapper: {
     padding: 16,
+    borderRadius: 20,
     backgroundColor: '#F8FAFF',
   },
   
