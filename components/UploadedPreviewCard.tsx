@@ -12,97 +12,112 @@ export function UploadedPreviewCard({
   onChange: () => void;
 }) {
   return (
-    <ThemedView style={styles.container}>
-      {/* IMAGE */}
-      <Image source={{ uri: imageUri }} style={styles.image} />
+    <View style={styles.wrapper}>
+      <ThemedView style={styles.container}>
+        {/* Image Preview */}
+        <View style={styles.imageSection}>
+          <Image source={{ uri: imageUri }} style={styles.image} />
+          <TouchableOpacity style={styles.changeButton} onPress={onChange}>
+            <ThemedText style={styles.changeButtonText}>Change</ThemedText>
+          </TouchableOpacity>
+        </View>
 
-      {/* CONTENT */}
-      <View style={styles.right}>
-        <ThemedText style={styles.title}>
-          Ready to Analyze
-        </ThemedText>
-
-        <ThemedText style={styles.desc}>
-          Please confirm that the image is clear and shows the skin condition you
-          want to analyze.
-        </ThemedText>
-
-        <TouchableOpacity style={styles.primary} onPress={onConfirm}>
-          <ThemedText style={styles.primaryText}>
-            Confirm & Analyze
+        {/* Text Content */}
+        <View style={styles.content}>
+          <ThemedText style={styles.title}>
+            ✓ Ready for Analysis
           </ThemedText>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.secondary} onPress={onChange}>
-          <ThemedText style={styles.secondaryText}>
-            Change Image
+          
+          <ThemedText style={styles.description}>
+            Confirm this image clearly shows your skin condition.
           </ThemedText>
-        </TouchableOpacity>
-      </View>
-    </ThemedView>
+
+          {/* Confirm Button */}
+          <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
+            <ThemedText style={styles.confirmButtonText}>
+              Analyze Skin
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
+      </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    padding: 18,
-    borderRadius: 14,
+  wrapper: {
+    padding: 16,
     backgroundColor: '#F8FAFF',
-    alignItems: 'center',
   },
-
-   image: {
-    width: 110,      // 🔼 slightly bigger
-    height: 120,
+  
+  container: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  
+  imageSection: {
+    position: 'relative',
+    height: 200,
+    backgroundColor: '#F1F5F9',
+  },
+  
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  
+  changeButton: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  
+  changeButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  
+  content: {
+    padding: 24,
+  },
+  
+  title: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#0F172A',
+    marginBottom: 8,
+  },
+  
+  description: {
+    fontSize: 14,
+    color: '#64748B',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  
+  confirmButton: {
+    backgroundColor: '#3B82F6',
+    paddingVertical: 16,
     borderRadius: 12,
-    marginRight: 12,
-  },
-
-
-  right: {
-    flex: 1,
-    gap: 8,
-  },
-
-   title: {
-    fontSize: 14,    // 🔽 smaller than subtitle
-    fontWeight: '600',
-    lineHeight: 18,
-    color: '#000',
     alignItems: 'center',
   },
-
-  desc: {
-    fontSize: 12,
-    color: '#4B5563', // better contrast
-    lineHeight: 16,
-  },
-
- 
-  primary: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 6,     // 🔽 smaller
-    borderRadius: 8,        // 🔽 less round
-    alignItems: 'center',
-    marginTop: 4,
-  },
-
-  primaryText: {
+  
+  confirmButtonText: {
     color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 11,           // 🔽 smaller text
-  },
-
-  secondary: {
-    backgroundColor: '#E5E7EB',
-    paddingVertical: 6,     // 🔽 smaller
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-
-  secondaryText: {
-    color: '#111827',
-    fontSize: 12,           // 🔽 smaller
+    fontSize: 16,
+    fontWeight: '700',
   },
 });
