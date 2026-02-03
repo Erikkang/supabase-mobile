@@ -17,6 +17,9 @@ export function UploadedPreviewCard({
         {/* Image Preview */}
         <View style={styles.imageSection}>
           <Image source={{ uri: imageUri }} style={styles.image} />
+          <TouchableOpacity style={styles.changeButton} onPress={onChange}>
+            <ThemedText style={styles.changeButtonText}>Change</ThemedText>
+          </TouchableOpacity>
         </View>
 
         {/* Text Content */}
@@ -29,17 +32,10 @@ export function UploadedPreviewCard({
             Confirm this image clearly shows your skin condition.
           </ThemedText>
 
-          {/* Analyze Button */}
-          <TouchableOpacity style={styles.analyzeButton} onPress={onConfirm}>
-            <ThemedText style={styles.analyzeButtonText}>
+          {/* Confirm Button */}
+          <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
+            <ThemedText style={styles.confirmButtonText}>
               Analyze Skin
-            </ThemedText>
-          </TouchableOpacity>
-
-          {/* Change Button */}
-          <TouchableOpacity style={styles.changeButton} onPress={onChange}>
-            <ThemedText style={styles.changeButtonText}>
-              Change Image
             </ThemedText>
           </TouchableOpacity>
         </View>
@@ -51,13 +47,13 @@ export function UploadedPreviewCard({
 const styles = StyleSheet.create({
   wrapper: {
     padding: 16,
-    borderRadius: 18,
+    borderRadius: 15,
     backgroundColor: '#F8FAFF',
   },
   
   container: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 18,
+    borderRadius: 15,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
@@ -75,6 +71,24 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  
+  changeButton: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  
+  changeButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#475569',
   },
   
   content: {
@@ -95,32 +109,16 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   
-  analyzeButton: {
+  confirmButton: {
     backgroundColor: '#3B82F6',
-    paddingVertical: 14,
-    borderRadius: 12,
+    paddingVertical: 15,
+    borderRadius: 15,
     alignItems: 'center',
-    marginBottom: 12,
   },
   
-  analyzeButtonText: {
+  confirmButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '700',
-  },
-  
-  changeButton: {
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
-  },
-  
-  changeButtonText: {
-    color: '#475569',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
