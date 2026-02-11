@@ -32,184 +32,97 @@ export default function HomeScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<ModelResult[] | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Called when an image is picked in UploadBox
+  const API_BASE_URL = "http://192.168.254.118:8000";
+
   const pickImage = (uri: string) => {
     setSelectedImage(uri);
+    setErrorMessage(null);
   };
 
-  // Called when Confirm & Analyze is pressed
+  // ============================================
+  // CALL BACKEND API (UPDATED)
+  // ============================================
+  const callBackendAPI = async (imageUri: string): Promise<ModelResult[]> => {
+    const formData = new FormData();
+
+    formData.append('image', {
+      uri: imageUri,
+      type: 'image/jpeg',
+      name: 'skin-image.jpg',
+    } as any);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/analyze`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
+  };
+
   const handleConfirm = async () => {
     if (!selectedImage) return;
 
     setIsAnalyzing(true);
+    setErrorMessage(null);
+
     try {
-      console.log('Analyzing image:', selectedImage);
+      console.log('Sending to backend:', `${API_BASE_URL}/analyze`);
 
-      // ============================================
-      // INTEGRATE YOUR ML MODEL HERE
-      // ============================================
-      
-      // Step 1: Convert image URI to tensor/blob
-      // This depends on which ML framework you're using:
-      // - TensorFlow.js: Use tf.browser.fromPixels()
-      // - ONNX Runtime: Convert to appropriate format
-      // - Your own framework: Follow its input requirements
+      const allModelResults = await callBackendAPI(selectedImage);
 
-      // const imageBlob = await uriToBlob(selectedImage);
-      
-      // Step 2: Run your trained model on the image
-      // Example for TensorFlow.js:
-      // const predictions = await model.predict(imageTensor);
-      // OR
-      // const predictions = await callYourModelAPI(imageBlob);
-
-      // Step 3: Format the results to match ModelResult structure
-      const allModelResults = generateMockResults();
-      
-      // Step 4: Store results in state
+      console.log('Received results:', allModelResults);
       setResults(allModelResults);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Analysis failed:', error);
-      alert('Failed to analyze image. Please try again.');
+
+      let errorMsg = 'Failed to analyze image. Please try again.';
+
+      if (error.message?.includes('Network')) {
+        errorMsg = 'Network error. Make sure:\n1. Backend is running\n2. IP address is correct\n3. Phone is on same WiFi';
+      } else if (error.message?.includes('API Error')) {
+        errorMsg = error.message;
+      }
+
+      setErrorMessage(errorMsg);
+      alert(errorMsg);
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  // Called when Change Image is pressed
   const handleChange = () => {
     setSelectedImage(null);
     setResults(null);
+    setErrorMessage(null);
   };
 
-  // Called when Analyze Another Image is pressed
   const handleAnalyzeAnother = () => {
     setSelectedImage(null);
     setResults(null);
+    setErrorMessage(null);
   };
 
-  // ============================================
-  // HELPER: Convert image URI to Blob (if needed)
-  // ============================================
-  const uriToBlob = async (uri: string): Promise<Blob> => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  };
-
-  // ============================================
-  // TEMPORARY: Mock results generator (for testing)
-  // Replace this with actual model predictions
-  // ============================================
-  const generateMockResults = (): ModelResult[] => {
-    return [
-      {
-        modelName: 'MobileNetV2',
-        modelType: 'Baseline 1',
-        metrics: {
-          accuracy: Math.random() * 8 + 82,
-          precision: Math.random() * 10 + 80,
-          f1Score: Math.random() * 8 + 81,
-        },
-        predictions: generateMockSkinConditions(0.8),
-      },
-      {
-        modelName: 'DenseNet-121',
-        modelType: 'Baseline 2',
-        metrics: {
-          accuracy: Math.random() * 8 + 86,
-          precision: Math.random() * 10 + 84,
-          f1Score: Math.random() * 8 + 85,
-        },
-        predictions: generateMockSkinConditions(0.85),
-      },
-      {
-        modelName: 'Hybrid Model',
-        modelType: 'Proposed Model',
-        metrics: {
-          accuracy: Math.random() * 6 + 92,
-          precision: Math.random() * 6 + 91,
-          f1Score: Math.random() * 6 + 91,
-        },
-        predictions: generateMockSkinConditions(0.95),
-      },
-    ];
-  };
-
-  const generateMockSkinConditions = (performanceMultiplier: number): SkinCondition[] => {
-    return [
-      {
-        name: 'Acne',
-        confidence: (Math.random() * 35 + 15) * performanceMultiplier,
-        description:
-          'Inflammatory skin condition characterized by comedones, papules, pustules, or cysts.',
-        recommendations: [
-          'Use non-comedogenic products',
-          'Consider salicylic acid or benzoyl peroxide treatments',
-          'Consult a dermatologist for persistent or severe acne',
-        ],
-      },
-      {
-        name: 'Rosacea',
-        confidence: (Math.random() * 30 + 10) * performanceMultiplier,
-        description:
-          'Chronic inflammatory condition causing facial redness, visible blood vessels, and sometimes pustules.',
-        recommendations: [
-          'Avoid triggers like spicy foods, alcohol, and extreme temperatures',
-          'Use gentle, fragrance-free products',
-          'Consider prescription treatments from a dermatologist',
-        ],
-      },
-      {
-        name: 'Eczema',
-        confidence: (Math.random() * 30 + 8) * performanceMultiplier,
-        description: 'Atopic dermatitis causing itchy, inflamed, and sometimes scaly patches of skin.',
-        recommendations: [
-          'Keep skin well-moisturized with thick emollients',
-          'Avoid harsh soaps and known allergens',
-          'Use prescribed topical corticosteroids if recommended by a doctor',
-        ],
-      },
-      {
-        name: 'Keratosis',
-        confidence: (Math.random() * 25 + 5) * performanceMultiplier,
-        description: 'Rough, scaly patches caused by buildup of keratin, often from sun damage.',
-        recommendations: [
-          'Use daily broad-spectrum sunscreen (SPF 30+)',
-          'Consider retinoid creams or chemical exfoliants',
-          'See a dermatologist for evaluation and possible removal',
-        ],
-      },
-      {
-        name: 'Carcinoma',
-        confidence: (Math.random() * 20 + 3) * performanceMultiplier,
-        description: 'Abnormal growth that may indicate skin cancer. Requires immediate medical evaluation.',
-        recommendations: [
-          'URGENT: Schedule an appointment with a dermatologist immediately',
-          'Do not delay seeking professional medical evaluation',
-          'Avoid sun exposure and always use sunscreen',
-        ],
-      },
-      {
-        name: 'Milia',
-        confidence: (Math.random() * 25 + 5) * performanceMultiplier,
-        description: 'Small, white keratin-filled cysts that appear as tiny bumps on the skin.',
-        recommendations: [
-          'Avoid picking or squeezing the bumps',
-          'Use gentle exfoliants with AHA or BHA',
-          'Consider professional extraction by a dermatologist',
-        ],
-      },
-    ];
-  };
-
-  // ============================================
-  // CONDITIONAL RENDERING BASED ON STATE
-  // ============================================
-
-  // 1. Analyzing state
   if (isAnalyzing) {
     return (
       <ParallaxScrollView
@@ -220,12 +133,12 @@ export default function HomeScreen() {
           <ActivityIndicator size="large" color="#2563EB" />
           <ThemedText style={styles.loadingText}>Analyzing skin condition...</ThemedText>
           <ThemedText style={styles.loadingSubtext}>This may take a few seconds</ThemedText>
+          <ThemedText style={styles.apiUrl}>({API_BASE_URL})</ThemedText>
         </View>
       </ParallaxScrollView>
     );
   }
 
-  // 2. Results state
   if (results && selectedImage) {
     return (
       <ClassificationResultsScreen
@@ -236,18 +149,15 @@ export default function HomeScreen() {
     );
   }
 
-  // 3. Upload/Preview state (DEFAULT)
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#F4F7FF', dark: '#0F172A' }}
       headerImage={<View />}
     >
-      {/* TITLE */}
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Skin Condition Analyzer</ThemedText>
       </ThemedView>
 
-      {/* SUBTITLE */}
       <ThemedView style={styles.stepContainer}>
         <ThemedText style={styles.subtitle}>
           Upload a facial image to analyze skin conditions
@@ -258,7 +168,21 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      {/* UPLOAD OR PREVIEW */}
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText style={styles.apiStatus}>
+          🔌 Backend: {API_BASE_URL}
+        </ThemedText>
+        <ThemedText style={styles.apiStatusSmall}>
+          Make sure backend is running: python app.py
+        </ThemedText>
+      </ThemedView>
+
+      {errorMessage && (
+        <ThemedView style={styles.errorContainer}>
+          <ThemedText style={styles.errorText}>❌ {errorMessage}</ThemedText>
+        </ThemedView>
+      )}
+
       <ThemedView style={styles.stepContainer}>
         {selectedImage ? (
           <UploadedPreviewCard
@@ -271,9 +195,27 @@ export default function HomeScreen() {
         )}
       </ThemedView>
 
-      {/* HOW IT WORKS - KEEP AS IS */}
       <ThemedView style={styles.stepContainer}>
         <HowItWorksCard />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText style={styles.instructionsTitle}>📋 Setup Instructions:</ThemedText>
+        <ThemedText style={styles.instructionText}>
+          1. Get your PC IP: Open PowerShell and run:{'\n'}
+          <ThemedText style={styles.code}>ipconfig | findstr "IPv4"</ThemedText>
+        </ThemedText>
+        <ThemedText style={styles.instructionText}>
+          2. Replace IP in this file (line ~50):{'\n'}
+          <ThemedText style={styles.code}>const API_BASE_URL = "http://YOUR_IP:8000"</ThemedText>
+        </ThemedText>
+        <ThemedText style={styles.instructionText}>
+          3. Make sure backend is running:{'\n'}
+          <ThemedText style={styles.code}>python app.py</ThemedText>
+        </ThemedText>
+        <ThemedText style={styles.instructionText}>
+          4. Both phone and PC must be on same WiFi network
+        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -284,39 +226,83 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-
   stepContainer: {
     gap: 8,
     marginBottom: 20,
     paddingHorizontal: 16,
   },
-
   subtitle: {
     textAlign: 'center',
   },
-
   disclaimer: {
     textAlign: 'center',
     fontSize: 12,
     opacity: 0.7,
   },
-
+  apiStatus: {
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#10B981',
+    padding: 12,
+    backgroundColor: '#F0FDF4',
+    borderRadius: 8,
+  },
+  apiStatusSmall: {
+    textAlign: 'center',
+    fontSize: 11,
+    opacity: 0.6,
+  },
+  errorContainer: {
+    backgroundColor: '#FEE2E2',
+    borderRadius: 8,
+    padding: 12,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#DC2626',
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 12,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 100,
   },
-
   loadingText: {
     marginTop: 16,
     fontSize: 16,
     fontWeight: '600',
   },
-
   loadingSubtext: {
     marginTop: 8,
     fontSize: 12,
     opacity: 0.6,
+  },
+  apiUrl: {
+    marginTop: 8,
+    fontSize: 10,
+    opacity: 0.5,
+  },
+  instructionsTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  instructionText: {
+    fontSize: 12,
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  code: {
+    fontFamily: 'monospace',
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    fontSize: 11,
   },
 });
