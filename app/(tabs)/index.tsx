@@ -165,7 +165,7 @@ export default function HomeScreen() {
         </View>
         <ThemedText style={styles.headerTitle}>Skin Condition Analyzer</ThemedText>
         <ThemedText style={styles.headerSubtitle}>
-          Upload a photo to analyze skin conditions using AI
+          Upload a photo to analyze skin conditions.
         </ThemedText>
         <View style={styles.disclaimerBadge}>
           <ThemedText style={styles.disclaimerText}>
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#2563EB',
+    backgroundColor: '#6794f4',
     alignItems: 'center',
     justifyContent: 'center',
   },

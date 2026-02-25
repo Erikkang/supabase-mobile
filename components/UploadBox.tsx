@@ -84,31 +84,41 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
 
 const styles = StyleSheet.create({
   uploadBox: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderStyle: 'dashed',
-    borderRadius: 12,
-    padding: 24,
+    borderColor: '#E0E0E0',
+    borderRadius: 16,
+    padding: 32,
     alignItems: 'center',
+    backgroundColor: '#FAFAFA',
   },
   uploadIcon: {
-    marginBottom: 6,
+    fontSize: 40,
+    marginBottom: 16,
+    color: '#A0A0A0',
   },
   uploadText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#2C2C2C',
+    marginBottom: 4,
     textAlign: 'center',
   },
   supportText: {
-    fontSize: 12,
-    opacity: 0.6,
-    marginBottom: 12,
+    fontSize: 13,
+    color: '#8E8E93',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    backgroundColor: '#2C2C2C',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    borderRadius: 10,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '500',
   },
 });
