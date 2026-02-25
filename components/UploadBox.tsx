@@ -8,7 +8,7 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
   const chooseImage = () => {
     Alert.alert(
       'Select Image',
-      'Choose from:',
+      '',
       [
         { text: 'Camera', onPress: openCamera },
         { text: 'Gallery', onPress: openGallery },

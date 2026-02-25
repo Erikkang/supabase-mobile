@@ -11,7 +11,7 @@ export function HowItWorksCard() {
         <ThemedView style={styles.titleRow}>
           <IconSymbol name="information-circle-outline" size={20} color="#2563EB" />
           <ThemedText type="subtitle" style={styles.titleText}>
-            How It Works
+            User's Guide
           </ThemedText>
         </ThemedView>
 
