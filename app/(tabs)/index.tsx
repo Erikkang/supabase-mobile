@@ -219,63 +219,63 @@ export default function HomeScreen() {
         </View>
       </ThemedView>
 
-      {/* How It Works - Original */}
+      {/* How It Works */}
       <ThemedView style={styles.stepContainer}>
         <HowItWorksCard />
       </ThemedView>
 
-      {/* Setup Instructions */}
-      <ThemedView style={styles.instructionsContainer}>
-        <View style={styles.instructionsHeader}>
-          <ThemedText style={styles.instructionsTitle}>📋 Setup Instructions</ThemedText>
-          <ThemedText style={styles.instructionsSubtitle}>For first-time setup</ThemedText>
+     {/* Setup Instructions */}
+<ThemedView style={styles.instructionsContainer}>
+  <View style={styles.instructionsHeader}>
+    <ThemedText style={styles.instructionsTitle}>Setup Guide</ThemedText>
+    <ThemedText style={styles.instructionsSubtitle}>Get started in 3 simple steps</ThemedText>
+  </View>
+
+  <View style={styles.stepsList}>
+    <View style={styles.stepItem}>
+      <View style={styles.stepNumber}>
+        <ThemedText style={styles.stepNumberText}>1</ThemedText>
+      </View>
+      <View style={styles.stepContent}>
+        <ThemedText style={styles.stepLabel}>Find your PC's IP address</ThemedText>
+        <View style={styles.codeBlock}>
+          <ThemedText style={styles.codeText}>ipconfig | findstr "IPv4"</ThemedText>
         </View>
+      </View>
+    </View>
 
-        <View style={styles.stepsList}>
-          <View style={styles.stepItem}>
-            <View style={styles.stepNumber}>
-              <ThemedText style={styles.stepNumberText}>1</ThemedText>
-            </View>
-            <View style={styles.stepContent}>
-              <ThemedText style={styles.stepLabel}>Get your PC's IP address</ThemedText>
-              <View style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>ipconfig | findstr "IPv4"</ThemedText>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.stepItem}>
-            <View style={styles.stepNumber}>
-              <ThemedText style={styles.stepNumberText}>2</ThemedText>
-            </View>
-            <View style={styles.stepContent}>
-              <ThemedText style={styles.stepLabel}>Update the API URL</ThemedText>
-              <View style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>const API_BASE_URL = "http://YOUR_IP:8000"</ThemedText>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.stepItem}>
-            <View style={styles.stepNumber}>
-              <ThemedText style={styles.stepNumberText}>3</ThemedText>
-            </View>
-            <View style={styles.stepContent}>
-              <ThemedText style={styles.stepLabel}>Start the backend server</ThemedText>
-              <View style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>python app.py</ThemedText>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.noteBox}>
-            <ThemedText style={styles.noteIcon}>📱</ThemedText>
-            <ThemedText style={styles.noteText}>
-              Make sure your phone and PC are connected to the same WiFi network
-            </ThemedText>
-          </View>
+    <View style={styles.stepItem}>
+      <View style={styles.stepNumber}>
+        <ThemedText style={styles.stepNumberText}>2</ThemedText>
+      </View>
+      <View style={styles.stepContent}>
+        <ThemedText style={styles.stepLabel}>Update API endpoint</ThemedText>
+        <View style={styles.codeBlock}>
+          <ThemedText style={styles.codeText}>API_BASE_URL = "http://YOUR_IP:8000"</ThemedText>
         </View>
-      </ThemedView>
+      </View>
+    </View>
+
+    <View style={styles.stepItem}>
+      <View style={styles.stepNumber}>
+        <ThemedText style={styles.stepNumberText}>3</ThemedText>
+      </View>
+      <View style={styles.stepContent}>
+        <ThemedText style={styles.stepLabel}>Start backend server</ThemedText>
+        <View style={styles.codeBlock}>
+          <ThemedText style={styles.codeText}>python app.py</ThemedText>
+        </View>
+      </View>
+    </View>
+
+    <View style={styles.noteBox}>
+      <ThemedText style={styles.noteIcon}>🔗</ThemedText>
+      <ThemedText style={styles.noteText}>
+        Connect your phone and PC to the same WiFi network
+      </ThemedText>
+    </View>
+  </View>
+</ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -419,86 +419,102 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 16,
   },
-  instructionsContainer: {
-    marginBottom: 32,
-  },
-  instructionsHeader: {
-    paddingHorizontal: 16,
-    marginBottom: 16,
-  },
-  instructionsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 2,
-  },
-  instructionsSubtitle: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  stepsList: {
-    paddingHorizontal: 16,
-    gap: 16,
-  },
-  stepItem: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  stepNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#6794f4',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stepNumberText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  stepContent: {
-    flex: 1,
-    gap: 6,
-  },
-  stepLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-  },
-  codeBlock: {
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  codeText: {
-    fontFamily: 'monospace',
-    fontSize: 12,
-    color: '#1F2937',
-  },
-  noteBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: '#F9FAFB',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    marginTop: 8,
-  },
-  noteIcon: {
-    fontSize: 20,
-  },
-  noteText: {
-    flex: 1,
-    fontSize: 13,
-    color: '#6B7280',
-    lineHeight: 18,
-  },
+ instructionsContainer: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 24,
+  marginHorizontal: 16,
+  marginBottom: 32,
+  paddingVertical: 20,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.02,
+  shadowRadius: 8,
+  elevation: 2,
+},
+instructionsHeader: {
+  paddingHorizontal: 20,
+  marginBottom: 20,
+},
+instructionsTitle: {
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#0A0A0A',
+  letterSpacing: -0.3,
+  marginBottom: 4,
+},
+instructionsSubtitle: {
+  fontSize: 14,
+  color: '#6C6C70',
+  fontWeight: '400',
+},
+stepsList: {
+  paddingHorizontal: 20,
+  gap: 20,
+},
+stepItem: {
+  flexDirection: 'row',
+  gap: 14,
+  alignItems: 'flex-start',
+},
+stepNumber: {
+  width: 28,
+  height: 28,
+  borderRadius: 10,
+  backgroundColor: '#F2F2F7',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: 2,
+},
+stepNumberText: {
+  fontSize: 14,
+  fontWeight: '500',
+  color: '#3A3A3C',
+},
+stepContent: {
+  flex: 1,
+  gap: 8,
+},
+stepLabel: {
+  fontSize: 15,
+  fontWeight: '500',
+  color: '#1C1C1E',
+  letterSpacing: -0.2,
+},
+codeBlock: {
+  backgroundColor: '#F8F8FA',
+  paddingHorizontal: 14,
+  paddingVertical: 12,
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: '#EFEFF4',
+},
+codeText: {
+  fontFamily: 'monospace',
+  fontSize: 13,
+  color: '#2563EB',
+  letterSpacing: -0.2,
+},
+noteBox: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 12,
+  backgroundColor: '#F8F8FA',
+  padding: 16,
+  borderRadius: 16,
+  marginTop: 8,
+  borderWidth: 1,
+  borderColor: '#EFEFF4',
+},
+noteIcon: {
+  fontSize: 18,
+},
+noteText: {
+  flex: 1,
+  fontSize: 14,
+  color: '#3A3A3C',
+  lineHeight: 20,
+  fontWeight: '400',
+},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
