@@ -42,61 +42,6 @@ export function HowItWorksCard() {
         </ThemedView>
       </ThemedView>
 
-      {/* SETUP INSTRUCTIONS SECTION */}
-      <ThemedView style={styles.section}>
-        <ThemedView style={styles.titleRow}>
-          <IconSymbol name="terminal-outline" size={20} color="#2563EB" />
-          <ThemedText type="subtitle" style={styles.titleText}>
-            Setup Guide
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedView style={styles.contentContainer}>
-          <ThemedView style={styles.stepContainer}>
-            <ThemedView style={styles.stepIconContainer}>
-              <IconSymbol name="code-outline" size={15} color="#2563EB" />
-            </ThemedView>
-            <ThemedView style={styles.stepTextContainer}>
-              <ThemedText style={styles.stepTitle}>Find your PC's IP</ThemedText>
-              <ThemedView style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>ipconfig | findstr "IPv4"</ThemedText>
-              </ThemedView>
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.stepContainer}>
-            <ThemedView style={styles.stepIconContainer}>
-              <IconSymbol name="link-outline" size={15} color="#2563EB" />
-            </ThemedView>
-            <ThemedView style={styles.stepTextContainer}>
-              <ThemedText style={styles.stepTitle}>Update API endpoint</ThemedText>
-              <ThemedView style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>API_BASE_URL = "http://YOUR_IP:8000"</ThemedText>
-              </ThemedView>
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.stepContainer}>
-            <ThemedView style={styles.stepIconContainer}>
-              <IconSymbol name="play-outline" size={15} color="#2563EB" />
-            </ThemedView>
-            <ThemedView style={styles.stepTextContainer}>
-              <ThemedText style={styles.stepTitle}>Start backend server</ThemedText>
-              <ThemedView style={styles.codeBlock}>
-                <ThemedText style={styles.codeText}>python app.py</ThemedText>
-              </ThemedView>
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.noteBox}>
-            <IconSymbol name="wifi-outline" size={16} color="#2563EB" />
-            <ThemedText style={styles.noteText}>
-              Connect your phone and PC to the same WiFi network
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
-      </ThemedView>
-
       {/* INFO MESSAGES */}
       <ThemedView style={styles.section}>
         <ThemedView style={styles.messageContainer}>

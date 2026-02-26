@@ -156,9 +156,6 @@ export default function HomeScreen() {
             </View>
             <ThemedText style={styles.loadingText}>Analyzing skin condition...</ThemedText>
             <ThemedText style={styles.loadingSubtext}>This may take a few seconds</ThemedText>
-            <View style={styles.apiBadge}>
-              <ThemedText style={styles.apiUrl}>📡 {API_BASE_URL}</ThemedText>
-            </View>
           </Animated.View>
         </View>
       </ParallaxScrollView>
@@ -208,21 +205,6 @@ export default function HomeScreen() {
           </View>
         </ThemedView>
 
-        {/* Connection Status */}
-        <View style={styles.connectionContainer}>
-          <View style={styles.connectionHeader}>
-            <View style={[styles.connectionDot, { backgroundColor: '#10B981' }]} />
-            <ThemedText style={styles.connectionTitle}>Backend Connected</ThemedText>
-          </View>
-          <View style={styles.connectionUrlWrapper}>
-            <ThemedText style={styles.connectionUrlLabel}>API Endpoint</ThemedText>
-            <ThemedText style={styles.connectionUrl}>{API_BASE_URL}</ThemedText>
-          </View>
-          <ThemedText style={styles.connectionHint}>
-            Make sure backend is running: python app.py
-          </ThemedText>
-        </View>
-
         {/* Error Message with Animation */}
         {errorMessage && (
           <Animated.View 
@@ -250,8 +232,7 @@ export default function HomeScreen() {
             <View style={styles.uploadTitleWrapper}>
               <ThemedText style={styles.uploadTitle}>Upload Image</ThemedText>
               <View style={styles.uploadTitleAccent} />
-                      </View>
-            
+            </View>
           </View>
           
           <View style={styles.uploadContainer}>
@@ -346,65 +327,6 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontWeight: '500',
   },
-  connectionContainer: {
-    marginHorizontal: 16,
-    marginBottom: 24,
-    padding: 18,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  connectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  connectionDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 8,
-    shadowColor: '#10B981',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-  },
-  connectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1F2937',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  connectionUrlWrapper: {
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  connectionUrlLabel: {
-    fontSize: 11,
-    color: '#64748B',
-    marginBottom: 4,
-    fontWeight: '500',
-  },
-  connectionUrl: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2563EB',
-    fontFamily: 'monospace',
-  },
-  connectionHint: {
-    fontSize: 12,
-    color: '#64748B',
-    marginLeft: 4,
-  },
   errorContainer: {
     marginHorizontal: 16,
     marginBottom: 24,
@@ -468,7 +390,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2563EB',
     borderRadius: 2,
   },
- 
   uploadFormat: {
     fontSize: 12,
     color: '#475569',
@@ -554,19 +475,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 14,
     color: '#6B7280',
-  },
-  apiBadge: {
-    marginTop: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-  },
-  apiUrl: {
-    fontSize: 12,
-    color: '#475569',
-    fontFamily: 'monospace',
   },
 });
