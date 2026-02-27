@@ -133,35 +133,30 @@ export default function HomeScreen() {
     setErrorMessage(null);
   };
 
-  if (isAnalyzing) {
-    return (
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#F0F4FF', dark: '#0F172A' }}
-        headerImage={<View />}
-      >
-        <View style={styles.loadingContainer}>
-          <Animated.View 
-            style={[
-              styles.loadingCard,
-              {
-                opacity: fadeAnim,
-                transform: [{ scale: scaleAnim }]
-              }
-            ]}
-          >
-            <View style={styles.loadingAnimation}>
-              <View style={styles.pulseRing} />
-              <View style={styles.pulseRing2} />
-              <ActivityIndicator size="large" color="#2563EB" />
-            </View>
-            <ThemedText style={styles.loadingText}>Analyzing skin condition...</ThemedText>
-            <ThemedText style={styles.loadingSubtext}>This may take a few seconds</ThemedText>
-          </Animated.View>
-        </View>
-      </ParallaxScrollView>
-    );
-  }
-
+if (isAnalyzing) {
+  return (
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#F0F4FF', dark: '#0F172A' }}
+      headerImage={<View />}
+    >
+      <View style={styles.loadingContainer}>
+        <Animated.View 
+          style={[
+            styles.loadingCard,
+            {
+              opacity: fadeAnim,
+              transform: [{ scale: scaleAnim }]
+            }
+          ]}
+        >
+          <ActivityIndicator size="large" color="#2563EB" style={styles.loadingSpinner} />
+          <ThemedText style={styles.loadingText}>Analyzing skin condition...</ThemedText>
+          <ThemedText style={styles.loadingSubtext}>This may take a few seconds</ThemedText>
+        </Animated.View>
+      </View>
+    </ParallaxScrollView>
+  );
+}
   if (results && selectedImage) {
     return (
       <ClassificationResultsScreen
@@ -420,60 +415,41 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginTop: 4,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 120,
-    paddingHorizontal: 20,
-  },
-  loadingCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 32,
-    padding: 40,
-    alignItems: 'center',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.15,
-    shadowRadius: 30,
-    elevation: 10,
-    width: '100%',
-    maxWidth: 340,
-  },
-  loadingAnimation: {
-    position: 'relative',
-    marginBottom: 24,
-  },
-  pulseRing: {
-    position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#2563EB20',
-    top: -12,
-    left: -12,
-    transform: [{ scale: 1.2 }],
-  },
-  pulseRing2: {
-    position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#2563EB10',
-    top: -12,
-    left: -12,
-    transform: [{ scale: 1.5 }],
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1F2937',
-    letterSpacing: -0.3,
-  },
-  loadingSubtext: {
-    marginTop: 8,
-    fontSize: 14,
-    color: '#6B7280',
-  },
+ loadingContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingVertical: 120,
+  paddingHorizontal: 20,
+},
+loadingCard: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 32,
+  padding: 40,
+  alignItems: 'center',
+  shadowColor: '#2563EB',
+  shadowOffset: { width: 0, height: 10 },
+  shadowOpacity: 0.15,
+  shadowRadius: 30,
+  elevation: 10,
+  width: '100%',
+  maxWidth: 340,
+  alignSelf: 'center',
+},
+loadingSpinner: {
+  marginBottom: 16,
+},
+loadingText: {
+  fontSize: 18,
+  fontWeight: '700',
+  color: '#1F2937',
+  letterSpacing: -0.3,
+  textAlign: 'center',
+},
+loadingSubtext: {
+  marginTop: 8,
+  fontSize: 14,
+  color: '#6B7280',
+  textAlign: 'center',
+},
 });
