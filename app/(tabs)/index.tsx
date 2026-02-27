@@ -40,7 +40,7 @@ export default function HomeScreen() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
-  const API_BASE_URL = "http://192.168.254.118:8000";
+  const API_BASE_URL = "http://192.168.1.11:8000";
 
   useEffect(() => {
     // Entrance animation

@@ -198,53 +198,6 @@ export function ClassificationResultsScreen({
         )}
       </ThemedView>
 
-      {/* Model Comparison Summary */}
-      <ThemedView style={styles.comparisonSection}>
-        <ThemedText style={styles.comparisonTitle}>Model Comparison</ThemedText>
-        
-        {results.map((model, index) => (
-          <View
-            key={index}
-            style={[
-              styles.comparisonRow,
-              model.modelType === 'Proposed Model' && styles.comparisonRowHighlight,
-            ]}
-          >
-            <View style={styles.comparisonModelInfo}>
-              <ThemedText style={styles.comparisonModelName}>
-                {model.modelName}
-              </ThemedText>
-              {model.modelType === 'Proposed Model' && (
-                <ThemedText style={styles.bestBadge}>Best</ThemedText>
-              )}
-            </View>
-            
-            <View style={styles.comparisonMetrics}>
-              <View style={styles.comparisonMetric}>
-                <ThemedText style={styles.comparisonMetricLabel}>Acc</ThemedText>
-                <ThemedText style={styles.comparisonMetricValue}>
-                  {model.metrics.accuracy.toFixed(0)}%
-                </ThemedText>
-              </View>
-              
-              <View style={styles.comparisonMetric}>
-                <ThemedText style={styles.comparisonMetricLabel}>Pre</ThemedText>
-                <ThemedText style={styles.comparisonMetricValue}>
-                  {model.metrics.precision.toFixed(0)}%
-                </ThemedText>
-              </View>
-              
-              <View style={styles.comparisonMetric}>
-                <ThemedText style={styles.comparisonMetricLabel}>F1</ThemedText>
-                <ThemedText style={styles.comparisonMetricValue}>
-                  {model.metrics.f1Score.toFixed(0)}%
-                </ThemedText>
-              </View>
-            </View>
-          </View>
-        ))}
-      </ThemedView>
-
       {/* Disclaimer */}
       <ThemedView style={styles.disclaimerSection}>
         <ThemedText style={styles.disclaimerTitle}>⚠️ Important Disclaimer</ThemedText>
@@ -502,84 +455,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#1E40AF',
     lineHeight: 16,
-  },
-
-  comparisonSection: {
-    marginHorizontal: 16,
-    marginBottom: 20,
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#F0FDF4',
-    borderWidth: 1,
-    borderColor: '#BBEF63',
-  },
-
-  comparisonTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#166534',
-    marginBottom: 12,
-  },
-
-  comparisonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    marginBottom: 8,
-    borderRadius: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DBEAFE',
-  },
-
-  comparisonRowHighlight: {
-    backgroundColor: '#DCEDC8',
-    borderBottomColor: '#AED581',
-  },
-
-  comparisonModelInfo: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-
-  comparisonModelName: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#166534',
-    marginBottom: 2,
-  },
-
-  bestBadge: {
-    fontSize: 10,
-    color: '#FFF',
-    backgroundColor: '#16A34A',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 3,
-    marginTop: 2,
-    overflow: 'hidden',
-  },
-
-  comparisonMetrics: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-
-  comparisonMetric: {
-    alignItems: 'center',
-  },
-
-  comparisonMetricLabel: {
-    fontSize: 10,
-    color: '#6B7280',
-    marginBottom: 2,
-  },
-
-  comparisonMetricValue: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#166534',
   },
 
   disclaimerSection: {
