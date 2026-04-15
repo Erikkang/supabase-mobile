@@ -1,4 +1,3 @@
-import { Modal } from 'react-native';
 import { ClassificationResultsScreen } from '@/components/Classificationresultsscreen';
 import { HowItWorksCard } from '@/components/HowItWorksCard';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
@@ -7,7 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 import { UploadBox } from '@/components/UploadBox';
 import { UploadedPreviewCard } from '@/components/UploadedPreviewCard';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Dimensions, Easing, StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, Easing, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -104,7 +103,7 @@ export default function HomeScreen() {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const infoHeightAnim = useRef(new Animated.Value(1)).current;
 
-  const API_BASE_URL = "http://192.168.1.11:8000";
+  const API_BASE_URL = "http://192.168.254.115:8000";
 
   useEffect(() => {
     Animated.parallel([
@@ -182,8 +181,10 @@ export default function HomeScreen() {
     } catch (error: any) {
       let errorMsg = 'Failed to analyze image. Please try again.';
 
-      if (error.message?.includes('Network')) {
-        errorMsg = 'Network error. Make sure:\n1. Backend is running\n2. IP address is correct\n3. Phone is on same WiFi';
+      if (error.message?.includes('Network') || error.message?.includes('fetch')) {
+        errorMsg = 'Connection error. Check your network and try again.';
+      } else if (error.message?.includes('No face detected') || error.message?.includes('not a skin')) {
+        errorMsg = error.message;
       } else if (error.message?.includes('API Error')) {
         errorMsg = error.message;
       }
@@ -205,6 +206,11 @@ export default function HomeScreen() {
     setResults(null);
     setErrorMessage(null);
   };
+
+  // Dynamic error title based on error message
+  const errorTitle = errorMessage?.includes('No face detected') || errorMessage?.includes('not a skin')
+    ? 'Invalid Image'
+    : 'Connection Error';
 
   if (isAnalyzing) {
     return (
@@ -290,7 +296,7 @@ export default function HomeScreen() {
                 <ThemedText style={styles.errorIcon}>⚠️</ThemedText>
               </View>
               <View style={styles.errorContent}>
-                <ThemedText style={styles.errorTitle}>Connection Error</ThemedText>
+                <ThemedText style={styles.errorTitle}>{errorTitle}</ThemedText>
                 <ThemedText style={styles.errorText}>{errorMessage}</ThemedText>
               </View>
             </Animated.View>
@@ -393,72 +399,72 @@ export default function HomeScreen() {
         </Animated.View>
       </ParallaxScrollView>
 
-     {/* MODAL WITH SEPARATE STYLES */}
-<Modal
-  animationType="slide"
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={() => {
-    setModalVisible(false);
-    setSelectedCondition(null);
-  }}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContainer}>
-      
-      {/* Header with icon and close button */}
-      <View style={styles.modalHeader}>
-        <View style={styles.modalIconContainer}>
-          <ThemedText style={styles.modalIcon}>{selectedCondition?.icon || '🔬'}</ThemedText>
-        </View>
-        <TouchableOpacity 
-          onPress={() => {
-            setModalVisible(false);
-            setSelectedCondition(null);
-          }}
-          style={styles.modalCloseButton}
-        >
-          <ThemedText style={styles.modalCloseText}>✕</ThemedText>
-        </TouchableOpacity>
-      </View>
+      {/* MODAL */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setSelectedCondition(null);
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            
+            {/* Header with icon and close button */}
+            <View style={styles.modalHeader}>
+              <View style={styles.modalIconContainer}>
+                <ThemedText style={styles.modalIcon}>{selectedCondition?.icon || '🔬'}</ThemedText>
+              </View>
+              <TouchableOpacity 
+                onPress={() => {
+                  setModalVisible(false);
+                  setSelectedCondition(null);
+                }}
+                style={styles.modalCloseButton}
+              >
+                <ThemedText style={styles.modalCloseText}>✕</ThemedText>
+              </TouchableOpacity>
+            </View>
 
-      {/* Condition Name */}
-      <ThemedText style={[styles.modalConditionName, { color: selectedCondition?.color || '#000' }]}>
-        {selectedCondition?.name || 'Skin Condition'}
-      </ThemedText>
-
-      {/* Scrollable Content */}
-      <ScrollView style={styles.modalScrollView}>
-        {/* Description */}
-        <View style={styles.modalSection}>
-          <ThemedText style={styles.modalSectionTitle}>Description</ThemedText>
-          <View style={styles.modalTextContainer}>
-            <ThemedText style={styles.modalDescription}>
-              {selectedCondition?.description || 'No description available.'}
+            {/* Condition Name */}
+            <ThemedText style={[styles.modalConditionName, { color: selectedCondition?.color || '#000' }]}>
+              {selectedCondition?.name || 'Skin Condition'}
             </ThemedText>
+
+            {/* Scrollable Content */}
+            <ScrollView style={styles.modalScrollView}>
+              {/* Description */}
+              <View style={styles.modalSection}>
+                <ThemedText style={styles.modalSectionTitle}>Description</ThemedText>
+                <View style={styles.modalTextContainer}>
+                  <ThemedText style={styles.modalDescription}>
+                    {selectedCondition?.description || 'No description available.'}
+                  </ThemedText>
+                </View>
+              </View>
+
+              {/* Detection Method */}
+              <View style={styles.modalSection}>
+                <ThemedText style={styles.modalSectionTitle}>Detection Method</ThemedText>
+                <View style={styles.modalTextContainer}>
+                  <ThemedText style={styles.modalDetectionText}>
+                    🔍 {selectedCondition?.detection || 'No detection information available.'}
+                  </ThemedText>
+                </View>
+              </View>
+
+              {/* Disclaimer */}
+              <View style={styles.modalFooter}>
+                <ThemedText style={styles.modalDisclaimer}>
+                  This information is for educational purposes only. Always consult with a dermatologist for proper diagnosis.
+                </ThemedText>
+              </View>
+            </ScrollView>
           </View>
         </View>
-
-        {/* Detection Method */}
-        <View style={styles.modalSection}>
-          <ThemedText style={styles.modalSectionTitle}>Detection Method</ThemedText>
-          <View style={styles.modalTextContainer}>
-            <ThemedText style={styles.modalDetectionText}>
-              🔍 {selectedCondition?.detection || 'No detection information available.'}
-            </ThemedText>
-          </View>
-        </View>
-
-        {/* Disclaimer */}
-        <View style={styles.modalFooter}>
-          <ThemedText style={styles.modalDisclaimer}>
-            This information is for educational purposes only. Always consult with a dermatologist for proper diagnosis.
-          </ThemedText>
-        </View>
-      </ScrollView>
-    </View>
-  </View>
-</Modal>
+      </Modal>
     </>
   );
 }
@@ -771,89 +777,89 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   // Modal Styles
- modalOverlay: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'rgba(0,0,0,0.5)',
-},
-modalContainer: {
-  width: '90%',
-  maxHeight: '80%',
-  backgroundColor: 'white',
-  borderRadius: 20,
-  padding: 20,
-},
-modalHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 20,
-},
-modalIconContainer: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
-  backgroundColor: '#F3F4F6',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-modalIcon: {
-  fontSize: 24,
-},
-modalCloseButton: {
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  backgroundColor: '#F3F4F6',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-modalCloseText: {
-  fontSize: 15,
-  fontWeight: 'bold',
-},
-modalConditionName: {
-  fontSize: 24,
-  fontWeight: 'bold',
-  marginBottom: 20,
-},
-modalScrollView: {
-  maxHeight: 400,
-},
-modalSection: {
-  marginBottom: 20,
-},
-modalSectionTitle: {
-  fontSize: 18,
-  fontWeight: '600',
-  marginBottom: 8,
-},
-modalTextContainer: {
-  backgroundColor: '#F9FAFB',
-  padding: 15,
-  borderRadius: 12,
-},
-modalDescription: {
-  fontSize: 14,
-  lineHeight: 22,
-  textAlign: 'justify',
-},
-modalDetectionText: {
-  fontSize: 14,
-  lineHeight: 22,
-  textAlign: 'justify',
-},
-modalFooter: {
-  marginTop: 10,
-  paddingTop: 15,
-  borderTopWidth: 1,
-  borderTopColor: '#E5E7EB',
-},
-modalDisclaimer: {
-  fontSize: 12,
-  color: '#6B7280',
-  fontStyle: 'italic',
-  textAlign: 'center',
-},
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    width: '90%',
+    maxHeight: '80%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalIconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalIcon: {
+    fontSize: 24,
+  },
+  modalCloseButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCloseText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  modalConditionName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalScrollView: {
+    maxHeight: 400,
+  },
+  modalSection: {
+    marginBottom: 20,
+  },
+  modalSectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  modalTextContainer: {
+    backgroundColor: '#F9FAFB',
+    padding: 15,
+    borderRadius: 12,
+  },
+  modalDescription: {
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'justify',
+  },
+  modalDetectionText: {
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'justify',
+  },
+  modalFooter: {
+    marginTop: 10,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  modalDisclaimer: {
+    fontSize: 12,
+    color: '#6B7280',
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
 });
