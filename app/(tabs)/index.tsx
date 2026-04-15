@@ -147,12 +147,9 @@ export default function HomeScreen() {
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+  method: 'POST',
+  body: formData,
+});
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.statusText}`);
