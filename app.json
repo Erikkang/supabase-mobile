@@ -8,12 +8,14 @@
     "scheme": "supabasemobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-
     "extra": {
       "SUPABASE_URL": "https://jeumueiuzkezypfpqttg.supabase.co",
-      "SUPABASE_ANON_KEY": "sb_publishable_InvZnmimc0lAOs_U-yjQpQ_LecJ7oqB"
+      "SUPABASE_ANON_KEY": "sb_publishable_InvZnmimc0lAOs_U-yjQpQ_LecJ7oqB",
+      "router": {},
+      "eas": {
+        "projectId": "178db592-48d5-4a60-9492-e6b6f8440a28"
+      }
     },
-
     "ios": {
       "supportsTablet": true
     },
@@ -25,7 +27,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "output": "static",
@@ -56,6 +62,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/178db592-48d5-4a60-9492-e6b6f8440a28"
     }
   }
 }
