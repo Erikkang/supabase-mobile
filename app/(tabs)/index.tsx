@@ -1,12 +1,11 @@
 import { ClassificationResultsScreen } from '@/components/Classificationresultsscreen';
 import { HowItWorksCard } from '@/components/HowItWorksCard';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UploadBox } from '@/components/UploadBox';
 import { UploadedPreviewCard } from '@/components/UploadedPreviewCard';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Dimensions, Easing, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, Easing, Modal, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -103,7 +102,7 @@ export default function HomeScreen() {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const infoHeightAnim = useRef(new Animated.Value(1)).current;
 
-  const API_BASE_URL = "https://facial-backend-92vm.onrender.com";
+  const API_BASE_URL = "http://192.168.254.115:8000";
 
   useEffect(() => {
     Animated.parallel([
@@ -147,9 +146,12 @@ export default function HomeScreen() {
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze`, {
-  method: 'POST',
-  body: formData,
-});
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.statusText}`);
@@ -211,10 +213,7 @@ export default function HomeScreen() {
 
   if (isAnalyzing) {
     return (
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#F0F4FF', dark: '#0F172A' }}
-        headerImage={<View />}
-      >
+      <SafeAreaView style={styles.safeArea}>
         <View style={styles.loadingContainer}>
           <Animated.View 
             style={[
@@ -230,7 +229,7 @@ export default function HomeScreen() {
             <ThemedText style={styles.loadingSubtext}>This may take a few seconds</ThemedText>
           </Animated.View>
         </View>
-      </ParallaxScrollView>
+      </SafeAreaView>
     );
   }
 
@@ -246,155 +245,158 @@ export default function HomeScreen() {
 
   return (
     <>
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#F0F4FF', dark: '#0F172A' }}
-        headerImage={<View />}
-      >
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }]
-            }
-          ]}
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          {/* Header Section */}
-          <ThemedView style={styles.headerContainer}>
-            <View style={styles.headerIconWrapper}>
-              <View style={styles.headerIconGlow} />
-              <View style={styles.headerIcon}>
-                <ThemedText style={styles.headerIconText}>🔬</ThemedText>
+          <Animated.View
+            style={[
+              styles.container,
+              {
+                opacity: fadeAnim,
+                transform: [{ scale: scaleAnim }]
+              }
+            ]}
+          >
+            {/* Header Section */}
+            <ThemedView style={styles.headerContainer}>
+              <View style={styles.headerIconWrapper}>
+                <View style={styles.headerIconGlow} />
+                <View style={styles.headerIcon}>
+                  <ThemedText style={styles.headerIconText}>🔬</ThemedText>
+                </View>
               </View>
-            </View>
-            <ThemedText style={styles.headerTitle}>Skin Condition Analyzer</ThemedText>
-            <ThemedText style={styles.headerSubtitle}>
-              Upload a photo to analyze skin conditions instantly
-            </ThemedText>
-            <View style={styles.disclaimerBadge}>
-              <ThemedText style={styles.disclaimerText}>
-                ⚕️ For educational purposes · Consult a dermatologist
+              <ThemedText style={styles.headerTitle}>Skin Condition Analyzer</ThemedText>
+              <ThemedText style={styles.headerSubtitle}>
+                Upload a photo to analyze skin conditions instantly
               </ThemedText>
-            </View>
-          </ThemedView>
-
-          {/* Error Message */}
-          {errorMessage && (
-            <Animated.View 
-              style={[
-                styles.errorContainer,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ scale: scaleAnim }]
-                }
-              ]}
-            >
-              <View style={styles.errorIconContainer}>
-                <ThemedText style={styles.errorIcon}>⚠️</ThemedText>
-              </View>
-              <View style={styles.errorContent}>
-                <ThemedText style={styles.errorTitle}>{errorTitle}</ThemedText>
-                <ThemedText style={styles.errorText}>{errorMessage}</ThemedText>
-              </View>
-            </Animated.View>
-          )}
-
-          {/* Upload Section */}
-          <ThemedView style={styles.uploadSection}>
-            <View style={styles.uploadHeader}>
-              <View style={styles.uploadTitleWrapper}>
-                <ThemedText style={styles.uploadTitle}>Upload Image</ThemedText>
-                <View style={styles.uploadTitleAccent} />
-              </View>
-            </View>
-            
-            <View style={styles.uploadContainer}>
-              {selectedImage ? (
-                <UploadedPreviewCard
-                  imageUri={selectedImage}
-                  onConfirm={handleConfirm}
-                  onChange={handleChange}
-                />
-              ) : (
-                <UploadBox onPickImage={pickImage} />
-              )}
-            </View>
-          </ThemedView>
-
-          {/* Information Section */}
-          <ThemedView style={styles.infoSection}>
-            <TouchableOpacity 
-              onPress={toggleInfo}
-              style={styles.infoHeader}
-              activeOpacity={0.7}
-            >
-              <View style={styles.infoTitleWrapper}>
-                <ThemedText style={styles.infoTitle}>Conditions</ThemedText>
-                <View style={styles.infoTitleAccent} />
-              </View>
-              <View style={styles.infoToggleContainer}>
-                <ThemedText style={styles.infoToggle}>
-                  {isInfoExpanded ? '−' : '+'}
+              <View style={styles.disclaimerBadge}>
+                <ThemedText style={styles.disclaimerText}>
+                  ⚕️ For educational purposes · Consult a dermatologist
                 </ThemedText>
               </View>
-            </TouchableOpacity>
+            </ThemedView>
 
-            <Animated.View style={[
-              styles.infoContent,
-              {
-                maxHeight: infoHeightAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 500]
-                }),
-                opacity: infoHeightAnim,
-              }
-            ]}>
-              <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                style={styles.conditionsScroll}
-                contentContainerStyle={styles.conditionsContainer}
+            {/* Error Message */}
+            {errorMessage && (
+              <Animated.View 
+                style={[
+                  styles.errorContainer,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ scale: scaleAnim }]
+                  }
+                ]}
               >
-                {SKIN_CONDITIONS.map((condition) => (
-                  <TouchableOpacity
-                    key={condition.id}
-                    style={[styles.conditionCard, { backgroundColor: condition.bgColor }]}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      setSelectedCondition(condition);
-                      setModalVisible(true);
-                    }}
-                  >
-                    <View style={[styles.conditionIconContainer, { backgroundColor: condition.color + '20' }]}>
-                      <ThemedText style={styles.conditionIcon}>{condition.icon}</ThemedText>
-                    </View>
-                    <ThemedText style={[styles.conditionName, { color: condition.color }]}>
-                      {condition.name}
-                    </ThemedText>
-                    <ThemedText style={styles.conditionDescription} numberOfLines={3}>
-                      {condition.description}
-                    </ThemedText>
-                    <View style={styles.detectionBadge}>
-                      <ThemedText style={styles.detectionText} numberOfLines={2}>
-                        🔍 {condition.detection}
-                      </ThemedText>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Animated.View>
-          </ThemedView>
+                <View style={styles.errorIconContainer}>
+                  <ThemedText style={styles.errorIcon}>⚠️</ThemedText>
+                </View>
+                <View style={styles.errorContent}>
+                  <ThemedText style={styles.errorTitle}>{errorTitle}</ThemedText>
+                  <ThemedText style={styles.errorText}>{errorMessage}</ThemedText>
+                </View>
+              </Animated.View>
+            )}
 
-          {/* How It Works */}
-          <ThemedView style={styles.stepContainer}>
-            <View style={styles.sectionHeader}>
-              <ThemedText style={styles.sectionTitle}>How It Works</ThemedText>
-              <View style={styles.sectionAccent} />
-            </View>
-            <HowItWorksCard />
-          </ThemedView>
-        </Animated.View>
-      </ParallaxScrollView>
+            {/* Upload Section */}
+            <ThemedView style={styles.uploadSection}>
+              <View style={styles.uploadHeader}>
+                <View style={styles.uploadTitleWrapper}>
+                  <ThemedText style={styles.uploadTitle}>Upload Image</ThemedText>
+                  <View style={styles.uploadTitleAccent} />
+                </View>
+              </View>
+              
+              <View style={styles.uploadContainer}>
+                {selectedImage ? (
+                  <UploadedPreviewCard
+                    imageUri={selectedImage}
+                    onConfirm={handleConfirm}
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <UploadBox onPickImage={pickImage} />
+                )}
+              </View>
+            </ThemedView>
+
+            {/* Information Section */}
+            <ThemedView style={styles.infoSection}>
+              <TouchableOpacity 
+                onPress={toggleInfo}
+                style={styles.infoHeader}
+                activeOpacity={0.7}
+              >
+                <View style={styles.infoTitleWrapper}>
+                  <ThemedText style={styles.infoTitle}>Conditions</ThemedText>
+                  <View style={styles.infoTitleAccent} />
+                </View>
+                <View style={styles.infoToggleContainer}>
+                  <ThemedText style={styles.infoToggle}>
+                    {isInfoExpanded ? '−' : '+'}
+                  </ThemedText>
+                </View>
+              </TouchableOpacity>
+
+              <Animated.View style={[
+                styles.infoContent,
+                {
+                  maxHeight: infoHeightAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 500]
+                  }),
+                  opacity: infoHeightAnim,
+                }
+              ]}>
+                <ScrollView 
+                  horizontal 
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.conditionsScroll}
+                  contentContainerStyle={styles.conditionsContainer}
+                >
+                  {SKIN_CONDITIONS.map((condition) => (
+                    <TouchableOpacity
+                      key={condition.id}
+                      style={[styles.conditionCard, { backgroundColor: condition.bgColor }]}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setSelectedCondition(condition);
+                        setModalVisible(true);
+                      }}
+                    >
+                      <View style={[styles.conditionIconContainer, { backgroundColor: condition.color + '20' }]}>
+                        <ThemedText style={styles.conditionIcon}>{condition.icon}</ThemedText>
+                      </View>
+                      <ThemedText style={[styles.conditionName, { color: condition.color }]}>
+                        {condition.name}
+                      </ThemedText>
+                      <ThemedText style={styles.conditionDescription} numberOfLines={3}>
+                        {condition.description}
+                      </ThemedText>
+                      <View style={styles.detectionBadge}>
+                        <ThemedText style={styles.detectionText} numberOfLines={2}>
+                          🔍 {condition.detection}
+                        </ThemedText>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Animated.View>
+            </ThemedView>
+
+            {/* How It Works */}
+            <ThemedView style={styles.stepContainer}>
+              <View style={styles.sectionHeader}>
+                <ThemedText style={styles.sectionTitle}>How It Works</ThemedText>
+                <View style={styles.sectionAccent} />
+              </View>
+              <HowItWorksCard />
+            </ThemedView>
+          </Animated.View>
+        </ScrollView>
+      </SafeAreaView>
 
       {/* MODAL */}
       <Modal
@@ -467,12 +469,22 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 32,
+  },
   container: {
     flex: 1,
   },
   headerContainer: {
     alignItems: 'center',
-    paddingTop: 20, 
+    paddingTop: 24,
     paddingBottom: 20, 
     paddingHorizontal: 20,
     marginBottom: 4, 
