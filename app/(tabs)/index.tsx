@@ -102,7 +102,7 @@ export default function HomeScreen() {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const infoHeightAnim = useRef(new Animated.Value(1)).current;
 
-  const API_BASE_URL = "http://192.168.254.115:8000";
+  const API_BASE_URL = "https://facial-backend-92vm.onrender.com";
 
   useEffect(() => {
     Animated.parallel([
