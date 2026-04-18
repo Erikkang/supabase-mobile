@@ -102,7 +102,7 @@ export default function HomeScreen() {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const infoHeightAnim = useRef(new Animated.Value(1)).current;
 
-  const API_BASE_URL = "https://kitmac03-facial-backend.hf.space/";
+const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
 
   useEffect(() => {
     Animated.parallel([
