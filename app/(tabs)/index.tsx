@@ -136,38 +136,35 @@ export default function HomeScreen() {
     setErrorMessage(null);
   };
 
-  const callBackendAPI = async (imageUri: string): Promise<ModelResult[]> => {
-    const formData = new FormData();
-    formData.append('image', {
-      uri: imageUri,
-      type: 'image/jpeg',
-      name: 'skin-image.jpg',
-    } as any);
+ const callBackendAPI = async (imageUri: string): Promise<ModelResult[]> => {
+  const formData = new FormData();
+  formData.append('image', {
+    uri: imageUri,
+    type: 'image/jpeg',
+    name: 'skin-image.jpg',
+  } as any);
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/analyze`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+  try {
+    const response = await fetch(`${API_BASE_URL}/analyze`, {
+      method: 'POST',
+      body: formData,
+      // ✅ No headers — let fetch set Content-Type + boundary automatically
+    });
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return data;
-    } catch (error) {
-      console.error('API Error:', error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
     }
-  };
 
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    return data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+};
   const handleConfirm = async () => {
     if (!selectedImage) return;
 
