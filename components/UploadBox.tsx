@@ -76,7 +76,7 @@ export function UploadBox({ onPickImage }: { onPickImage: (uri: string) => void 
       </ThemedText>
 
       <TouchableOpacity style={styles.button} onPress={chooseImage}>
-        <ThemedText style={styles.buttonText}>Choose Image</ThemedText>
+        <ThemedText style={styles.buttonText}>Upload Image</ThemedText>
       </TouchableOpacity>
     </ThemedView>
   );
