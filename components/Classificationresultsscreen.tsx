@@ -99,34 +99,7 @@ export function ClassificationResultsScreen({
         </View>
       </View>
 
-      {/* Model Performance Metrics */}
-      <ThemedView style={styles.metricsSection}>
-        <ThemedText style={styles.metricsTitle}>
-          {currentModel.modelName} Performance
-        </ThemedText>
-
-        <View style={styles.metricRow}>
-          <ThemedText style={styles.metricLabel}>Accuracy</ThemedText>
-          <ThemedText style={styles.metricValue}>
-            {currentModel.metrics.accuracy.toFixed(2)}%
-          </ThemedText>
-        </View>
-
-        <View style={styles.metricRow}>
-          <ThemedText style={styles.metricLabel}>Precision</ThemedText>
-          <ThemedText style={styles.metricValue}>
-            {currentModel.metrics.precision.toFixed(2)}%
-          </ThemedText>
-        </View>
-
-        <View style={styles.metricRow}>
-          <ThemedText style={styles.metricLabel}>F1-Score</ThemedText>
-          <ThemedText style={styles.metricValue}>
-            {currentModel.metrics.f1Score.toFixed(2)}%
-          </ThemedText>
-        </View>
-      </ThemedView>
-
+    
       {/* Detection Results */}
       <ThemedView style={styles.resultsSection}>
         <ThemedText style={styles.resultsTitle}>Detection Results</ThemedText>
@@ -221,11 +194,6 @@ const styles = StyleSheet.create({
   tabTextActive: { color: '#FFFFFF' },
   tabSubtext: { fontSize: 10, color: '#6B7280', marginTop: 2 },
   tabSubtextActive: { color: '#FFFFFF', opacity: 0.9 },
-  metricsSection: { marginHorizontal: 16, marginBottom: 20, padding: 16, borderRadius: 12, backgroundColor: '#F9FAFB' },
-  metricsTitle: { fontSize: 14, fontWeight: '600', marginBottom: 12 },
-  metricRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  metricLabel: { fontSize: 13, color: '#6B7280' },
-  metricValue: { fontSize: 13, fontWeight: '600', color: '#1F2937' },
   resultsSection: { marginHorizontal: 16, marginBottom: 20, padding: 16, borderRadius: 12 },
   resultsTitle: { fontSize: 14, fontWeight: '600', marginBottom: 12 },
   conditionCard: { marginBottom: 16, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#E5E7EB' },
