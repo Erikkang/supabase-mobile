@@ -175,10 +175,10 @@ const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
       const allModelResults = await callBackendAPI(selectedImage);
       setResults(allModelResults);
     } catch (error: any) {
-      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affectec skin area in good lighting';
+      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affected skin area in good lighting.';
 
       if (error.message?.includes('Network') || error.message?.includes('fetch')) {
-        errorMsg = 'Connection error. Check your network and try again.';
+        errorMsg = 'Error. Check your network and try again.';
       } else if (error.message?.includes('No face detected') || error.message?.includes('not a skin')) {
         errorMsg = error.message;
       } else if (error.message?.includes('API Error')) {
