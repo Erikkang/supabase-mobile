@@ -102,7 +102,7 @@ export default function HomeScreen() {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const infoHeightAnim = useRef(new Animated.Value(1)).current;
 
-const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
+  const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
 
   useEffect(() => {
     Animated.parallel([
@@ -136,35 +136,35 @@ const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
     setErrorMessage(null);
   };
 
- const callBackendAPI = async (imageUri: string): Promise<ModelResult[]> => {
-  const formData = new FormData();
-  formData.append('image', {
-    uri: imageUri,
-    type: 'image/jpeg',
-    name: 'skin-image.jpg',
-  } as any);
+  const callBackendAPI = async (imageUri: string): Promise<ModelResult[]> => {
+    const formData = new FormData();
+    formData.append('image', {
+      uri: imageUri,
+      type: 'image/jpeg',
+      name: 'skin-image.jpg',
+    } as any);
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/analyze`, {
-      method: 'POST',
-      body: formData,
-      // ✅ No headers — let fetch set Content-Type + boundary automatically
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/analyze`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return data;
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
     }
+  };
 
-    const data = await response.json();
-    if (data.error) {
-      throw new Error(data.error);
-    }
-    return data;
-  } catch (error) {
-    console.error('API Error:', error);
-    throw error;
-  }
-};
   const handleConfirm = async () => {
     if (!selectedImage) return;
 
@@ -175,11 +175,12 @@ const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
       const allModelResults = await callBackendAPI(selectedImage);
       setResults(allModelResults);
     } catch (error: any) {
-      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affected skin area on the face in good lighting.';
+      // ✅ FIXED: updated to match new backend error messages
+      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affected skin area in good lighting.';
 
       if (error.message?.includes('Network') || error.message?.includes('fetch')) {
         errorMsg = 'Error. Check your network and try again.';
-      } else if (error.message?.includes('No face detected') || error.message?.includes('not a skin')) {
+      } else if (error.message?.includes('Unable to detect') || error.message?.includes('not a skin')) {
         errorMsg = error.message;
       } else if (error.message?.includes('API Error')) {
         errorMsg = error.message;
@@ -203,8 +204,8 @@ const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
     setErrorMessage(null);
   };
 
-  // Dynamic error title based on error message
-  const errorTitle = errorMessage?.includes('No face detected') || errorMessage?.includes('not a skin')
+  // ✅ FIXED: updated to match new backend error messages
+  const errorTitle = errorMessage?.includes('Unable to detect') || errorMessage?.includes('not a skin')
     ? 'Invalid Image'
     : 'Connection Error';
 
