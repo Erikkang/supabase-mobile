@@ -180,8 +180,7 @@ export default function HomeScreen() {
 
       if (error.message?.includes('Network') || error.message?.includes('fetch')) {
         errorMsg = 'Error. Check your network and try again.';
-      } else if (error.message?.includes('Unable to detect') || error.message?.includes('not a skin')) {
-        errorMsg = error.message;
+     
       } else if (error.message?.includes('API Error')) {
         errorMsg = error.message;
       }
