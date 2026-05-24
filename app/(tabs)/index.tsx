@@ -176,7 +176,7 @@ export default function HomeScreen() {
       setResults(allModelResults);
     } catch (error: any) {
       // ✅ FIXED: updated to match new backend error messages
-      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affected skin area in good lighting.';
+      let errorMsg = 'Unable to analyze this image. Please upload a clear, close-up photo of the affected skin area on the face in good lighting.';
 
       if (error.message?.includes('Network') || error.message?.includes('fetch')) {
         errorMsg = 'Error. Check your network and try again.';
