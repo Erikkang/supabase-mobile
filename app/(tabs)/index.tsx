@@ -206,7 +206,7 @@ const API_BASE_URL = "https://kitmac03-facial-backend.hf.space";
   // Dynamic error title based on error message
   const errorTitle = errorMessage?.includes('No face detected') || errorMessage?.includes('not a skin')
     ? 'Invalid Image'
-    : 'Connection Error';
+    : 'Error';
 
   if (isAnalyzing) {
     return (
